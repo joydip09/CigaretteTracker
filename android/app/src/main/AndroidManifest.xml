@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
       android:name=".MainApplication"
@@ -23,5 +24,34 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      <!-- ① Home screen widget -->
+<receiver
+    android:name=".widget.SmokeWidget"
+    android:exported="true"
+    android:label="Smoke Tracker Widget">
+    <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="com.cigarettetracker.ACTION_LOG_CIGARETTE" />
+        <action android:name="com.cigarettetracker.ACTION_UNDO_CIGARETTE" />
+        <action android:name="com.cigarettetracker.ACTION_UNDO_EXPIRED" />
+    </intent-filter>
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/smoke_widget_info" />
+</receiver>
+
+<!-- ② Lock screen widget -->
+<receiver
+    android:name=".widget.SmokeLockscreenWidget"
+    android:exported="true"
+    android:label="Smoke Tracker — Lock Screen">
+    <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="com.cigarettetracker.ACTION_LOG_FROM_LOCK" />
+    </intent-filter>
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/lockscreen_widget_info" />
+</receiver>
     </application>
 </manifest>

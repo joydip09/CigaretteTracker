@@ -34,6 +34,8 @@ local.properties
 *.keystore
 !debug.keystore
 .kotlin/
+android/build/
+android/app/build/
 
 # node.js
 #
@@ -73,3 +75,29 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# React Native / Metro
+node_modules/.cache/
+metro-cache/
+
+# Android build outputs
+android/build/
+android/app/build/
+*.apk
+*.aab
+
+# Env files
+.env
+.env.*
+
+# Logs
+*.log
+
+# Temp files
+.cache/
+tmp/
+temp/
+
+# Windows
+Thumbs.db
+desktop.ini
