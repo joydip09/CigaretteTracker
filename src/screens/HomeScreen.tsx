@@ -10,7 +10,6 @@ import {
   Dimensions,
 } from 'react-native';
 import { useApp } from '../context/AppContext';
-import { clear } from 'react-native/types_generated/Libraries/LogBox/Data/LogBoxData';
 
 const { width } = Dimensions.get('window');
 const UNDO_WINDOW_MS = 3 * 60 * 1000; // 3 minutes
