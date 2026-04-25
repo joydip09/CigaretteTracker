@@ -82,7 +82,7 @@ npx react-native run-android
 
 You can download the latest release APK here:
 
-👉 **[Download APK](./releases/app-release.apk)**
+👉 **[Download APK](./releases/CigaretteTracker-v1.0.0.apk)**
 
 ---
 
