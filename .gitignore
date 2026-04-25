@@ -94,6 +94,7 @@ android/app/build/
 *.log
 
 # Temp files
+.bundle/
 .cache/
 tmp/
 temp/

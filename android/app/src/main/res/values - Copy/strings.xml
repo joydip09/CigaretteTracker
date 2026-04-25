@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Smoke Tracker</string>
-    <string name="widget_description">Track cigarettes and costs right from your home screen</string>
-    <string name="lockscreen_widget_description">Log a cigarette instantly from your lock screen</string>
-</resources>
