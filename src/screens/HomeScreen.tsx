@@ -10,9 +10,16 @@ import {
   Dimensions,
 } from 'react-native';
 import { useApp } from '../context/AppContext';
+import { showNotification } from '../../notification';
 
 const { width } = Dimensions.get('window');
 const UNDO_WINDOW_MS = 3 * 60 * 1000; // 3 minutes
+// Typical nicotine per cigarette range: 0.8–1.2 mg per stick (can adjust)
+const calculateNicotineRange = (count: number) => {
+  const minNicotine = 0.8 * count;
+  const maxNicotine = 1.2 * count;
+  return `${Math.round(minNicotine)}–${Math.round(maxNicotine)}`;
+};
 
 export default function HomeScreen() {
   const {
@@ -64,8 +71,29 @@ export default function HomeScreen() {
   const undoColor =
     secondsLeft > 120 ? '#34c759' : secondsLeft > 60 ? '#ffcc00' : '#ff6b35';
 
+  const warningMessages = [
+    'Bro... that’s not a limit anymore 😭',
+    'Your lungs just filed a complaint 📝',
+    'Easy there, chimney 🏭',
+    "At this point you're speedrunning it 💀",
+    'That cigarette didn’t even stand a chance 😶‍🌫️',
+    'Relax... it’s not a competition 🏁',
+    'Your future self is side-eyeing you right now 👀',
+    'Even your lighter needs a break 🔥',
+    'You’re way past the ‘just one more’ phase 😬',
+    'Okay this is getting suspicious 🤨',
+    'Your daily goal is crying in the corner 🥲',
+    'Plot twist: you were supposed to STOP at the limit',
+    'Your lungs: ‘we need to talk’ 😐',
+    'Achievement unlocked: Overlimit Master 🏆',
+    'This wasn’t in the plan, was it? 😅',
+  ];
+
   const handleAdd = () => {
     Vibration.vibrate(50);
+
+    const newCount = todayCount + 1;
+
     Animated.sequence([
       Animated.parallel([
         Animated.spring(scaleAnim, {
@@ -93,7 +121,15 @@ export default function HomeScreen() {
         }),
       ]),
     ]).start();
+
     addCigarette();
+
+    if (newCount > settings.dailyGoal) {
+      const randomMessage =
+        warningMessages[Math.floor(Math.random() * warningMessages.length)];
+
+      showNotification('Limit Exceeded 🚬', randomMessage);
+    }
   };
 
   const handleUndo = () => {
@@ -214,11 +250,10 @@ export default function HomeScreen() {
           <Text style={styles.statLabel}>Daily Goal</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={styles.statValue}>
-            {settings.currency}
-            {(settings.pricePerPack / settings.cigarettesPerPack).toFixed(0)}
+          <Text style={[styles.statValue, styles.statValueSmall]}>
+            {calculateNicotineRange(todayCount)} mg
           </Text>
-          <Text style={styles.statLabel}>Per Stick</Text>
+          <Text style={styles.statLabel}>Nicotine Intake</Text>
         </View>
       </View>
 
@@ -398,12 +433,17 @@ const styles = StyleSheet.create({
   statsRow: { flexDirection: 'row', width: '100%', marginBottom: 20, gap: 10 },
   statCard: {
     flex: 1,
+    minWidth: 90, // ensure enough space
+    maxWidth: 110, // limit expansion
     backgroundColor: '#1e0e03',
     borderRadius: 14,
     padding: 14,
     borderWidth: 1,
     borderColor: '#3d1f0a',
     alignItems: 'center',
+  },
+  statValueSmall: {
+    fontSize: 16,
   },
   statCardMid: { borderColor: '#ff6b35' },
   statValue: {

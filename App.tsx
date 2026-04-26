@@ -1,26 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StatusBar } from 'react-native';
+
 import HomeScreen from './src/screens/HomeScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import StatsScreen from './src/screens/StatsScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+
 import { AppProvider } from './src/context/AppContext';
 import TabBarIcon from './src/components/TabBarIcon';
 
+import { createChannel, showNotification } from './notification';
+
 const Tab = createBottomTabNavigator();
+const renderTabBarIcon = (
+  routeName: string,
+  focused: boolean,
+  color: string,
+) => {
+  return <TabBarIcon route={routeName} focused={focused} color={color} />;
+};
 
 export default function App() {
+  useEffect(() => {
+    createChannel();
+    showNotification();
+  }, []);
+
   return (
     <AppProvider>
       <StatusBar barStyle="light-content" backgroundColor="#1a0a00" />
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color }) => (
-              <TabBarIcon route={route.name} focused={focused} color={color} />
-            ),
+            tabBarIcon: ({ focused, color }) =>
+              renderTabBarIcon(route.name, focused, color),
             tabBarActiveTintColor: '#ff6b35',
             tabBarInactiveTintColor: '#8a6a5a',
             tabBarStyle: {
@@ -49,10 +64,10 @@ export default function App() {
             },
           })}
         >
-          <Tab.Screen name="Today" component={HomeScreen} options={{ title: 'Today' }} />
-          <Tab.Screen name="History" component={HistoryScreen} options={{ title: 'History' }} />
-          <Tab.Screen name="Stats" component={StatsScreen} options={{ title: 'Analytics' }} />
-          <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: 'Settings' }} />
+          <Tab.Screen name="Today" component={HomeScreen} />
+          <Tab.Screen name="History" component={HistoryScreen} />
+          <Tab.Screen name="Stats" component={StatsScreen} />
+          <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </AppProvider>
